@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImageGallery ImageGallery snapshot renders 1`] = `
+<div
+  className="homepage"
+>
+  <div>
+    <h4
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      Loading...
+    </h4>
+  </div>
+</div>
+`;
+
+exports[`ImageGallery snapshot renders 1`] = `
+<div
+  className="HomePage"
+>
+  <div>
+    <div>
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Test api ImageGallery snapshot renders 1`] = `
+<div
+  className="homepage"
+>
+  <div>
+    <h4
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      Loading...
+    </h4>
+  </div>
+</div>
+`;
