@@ -4,10 +4,21 @@ import "./index.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroller";
-import { PhotoSwipeGallery } from "react-photoswipe";
+import { PhotoSwipeGallery, PhotoSwipeGalleryItem } from "react-photoswipe";
 
 export const APIURL = "https://jsonplaceholder.typicode.com/photos";
 export const fetchImages = (page = 1) => axios.get(`${APIURL}?albumId=${page}`);
+
+
+export interface ApiImage {
+  albumId: Number;
+  id: Number;
+  title: '';
+  url: '';
+  thumbnailUrl: '';
+  width?: '';
+  height?: '';
+}
 
 let page = 0;
 
@@ -15,7 +26,7 @@ let page = 0;
  * Image gallery class
  */
 function ImageGallery() {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([] as PhotoSwipeGalleryItem[]);
   const [isInitialized, setIsInitialized] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [error, setError] = useState(false);
@@ -28,7 +39,7 @@ function ImageGallery() {
     setError(false);
     try {
       const result = await fetchImages(page);
-      setImages(images.concat(parseImages(result.data)));
+      setImages([...images, ...parseImages(result.data)]);
     } catch (error) {
       setError(true);
     }
@@ -40,15 +51,14 @@ function ImageGallery() {
    *
    * @return list of parsed images with proper model
    */
-  const parseImages = (data) => {
-    return data.reduce((acc, image) => {
+  const parseImages = (data: ApiImage[]): PhotoSwipeGalleryItem[] => {
+    return data.reduce((acc: PhotoSwipeGalleryItem[], image: ApiImage) => {
       acc.push({
         ...image,
         src: image.thumbnailUrl,
         thumbnail: image.thumbnailUrl,
-        w: image.width ? image.width : 1200,
-        h: image.height ? image.height : 900,
-        title: image.id,
+        w: 1200,
+        h: 900
       });
       return acc;
     }, []);
@@ -64,8 +74,8 @@ function ImageGallery() {
   /**
    * Thumbnails content
    */
-  const getThumbnailContent = (image) => (
-    <img alt={image.title} src={image.thumbnail} width={180} height={150} />
+  const getThumbnailContent = (image: PhotoSwipeGalleryItem) => (
+    <img src={image.thumbnail} width={180} height={150} alt=''/>
   );
 
   useEffect(() => {
