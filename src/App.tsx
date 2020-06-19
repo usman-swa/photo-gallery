@@ -8,16 +8,33 @@ import { PhotoSwipeGallery, PhotoSwipeGalleryItem } from "react-photoswipe";
 
 export const APIURL = "https://jsonplaceholder.typicode.com/photos";
 export const fetchImages = (page = 1) => axios.get(`${APIURL}?albumId=${page}`);
+/**
+ * Parse images to be able to be displayed by PhotoSwipeGallery
+ *
+ * @return list of parsed images with proper model
+ */
+export const parseImages = (data: ApiImage[]): PhotoSwipeGalleryItem[] => {
+  return data.reduce((acc: PhotoSwipeGalleryItem[], image: ApiImage) => {
+    acc.push({
+      ...image,
+      src: image.thumbnailUrl,
+      thumbnail: image.thumbnailUrl,
+      w: image.width ? image.width: 1200,
+      h: image.height ? image.height : 900
+    });
+    return acc;
+  }, []);
+};
 
 
 export interface ApiImage {
-  albumId: Number;
-  id: Number;
-  title: '';
-  url: '';
-  thumbnailUrl: '';
-  width?: '';
-  height?: '';
+  albumId: number;
+  id: number;
+  title: string;
+  url: string;
+  thumbnailUrl: string;
+  width?: number;
+  height?: number;
 }
 
 let page = 0;
@@ -44,24 +61,6 @@ function ImageGallery() {
       setError(true);
     }
     setIsInitialized(true);
-  };
-
-  /**
-   * Parse images to be able to be displayed by PhotoSwipeGallery
-   *
-   * @return list of parsed images with proper model
-   */
-  const parseImages = (data: ApiImage[]): PhotoSwipeGalleryItem[] => {
-    return data.reduce((acc: PhotoSwipeGalleryItem[], image: ApiImage) => {
-      acc.push({
-        ...image,
-        src: image.thumbnailUrl,
-        thumbnail: image.thumbnailUrl,
-        w: 1200,
-        h: 900
-      });
-      return acc;
-    }, []);
   };
 
   /**
